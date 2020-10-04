@@ -71,7 +71,7 @@ async function fetchSideshift(swapFuncParams: SwapFuncParams) {
           inputAmount: tx.depositMin, // TODO: or depositMax?
           outputAddress: tx.settleAddress.address,
           outputCurrency: tx.settleAsset.toUpperCase(),
-          outputAmount: tx.settleAmount,
+          outputAmount: tx.settleAmount, // TODO: outputAmount is string, but settleAmount is number
           timestamp: tx.createdAt
         }
         newTransactions.push(sishTx)

@@ -280,7 +280,7 @@ async function report (argv: Array<any>) {
     const ssResults = config.shapeShiftToken
       ? await doSummaryFunction(doShapeShift)
       : {}
-    const sishResults = config.sideshiftAffiliateId
+    const sishResults = config.sideShiftAffiliateId
       ? await doSummaryFunction(doSideshift)
       : {}
     const faResults = config.faastAffiliateId
