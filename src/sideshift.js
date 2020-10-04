@@ -10,17 +10,16 @@ const confFileName = './config.json'
 const config = js.readFileSync(confFileName)
 
 const SIDESHIFT_CACHE = './cache/sishRaw.json'
-const PAGE_LIMIT = 50
-const SISH_QUERY_PAGES = 3
+const PAGE_LIMIT = 500
 
-async function doSideshift (swapFuncParams: SwapFuncParams) {
+async function doSideshift(swapFuncParams: SwapFuncParams) {
   return checkSwapService(fetchSideshift,
     SIDESHIFT_CACHE,
     'sish',
     swapFuncParams)
 }
 
-async function fetchSideshift (swapFuncParams: SwapFuncParams) {
+async function fetchSideshift(swapFuncParams: SwapFuncParams) {
   if (!swapFuncParams.useCache) {
     console.log('Fetching Sideshift...')
   }
@@ -32,21 +31,19 @@ async function fetchSideshift (swapFuncParams: SwapFuncParams) {
   }
 
   const newTransactions: StandardTx[] = []
-  let page = 1
+  let offset = 0
 
   while (1 && !swapFuncParams.useCache) {
     try {
-      const url = `https://sideshift.ai/api/v1/affiliate/completedOrders?limit=${PAGE_LIMIT}&page=${page}`
+      const url = `https://sideshift.ai/api/v1/affiliate/completedOrders?limit=${PAGE_LIMIT}&offset=${offset}&affiliateId=${config.sideShiftAffiliateId}`
       const options = {
         method: 'GET',
         headers: {
-          'affiliateId': `${config.sideshiftAffiliateId}`,
-          'affiliateSecret': `${config.sideshiftAffiliateSecret}`
+          'affiliateSecret': `${config.sideShiftAffiliateSecret}`
         }
       }
 
-      const response = await fetch(url, options)
-      const transactions = response.json()
+      const transactions = await fetch(url, options).then(response => response.json())
 
       for (const tx of transactions) {
         const timestamp = new Date(tx.createdAt).getTime() / 1000 // TODO: check if this is valid
@@ -70,10 +67,10 @@ async function fetchSideshift (swapFuncParams: SwapFuncParams) {
     } catch (e) {
       break
     }
-    page++
-    if (page > SISH_QUERY_PAGES) {
+    if (offset > 1500) {
       break
     }
+    offset += PAGE_LIMIT
   }
   return {
     diskCache,
