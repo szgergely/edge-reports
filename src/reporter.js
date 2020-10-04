@@ -46,7 +46,7 @@ async function main (swapFuncParams: SwapFuncParams) {
     console.error('doShapeShift failed')
     return {}
   })
-  const rSish = await doSideshift(swapFuncParams).catch(e => {
+  const rSsai = await doSideshift(swapFuncParams).catch(e => {
     console.error('doSideshift failed')
     return {}
   })
@@ -121,7 +121,7 @@ async function main (swapFuncParams: SwapFuncParams) {
   printTxDataMap('CHA', rCha)
   printTxDataMap('FAA', rFaa)
   printTxDataMap('SSH', rSsh)
-  printTxDataMap('SISH', rSish)
+  printTxDataMap('SSAI', rSsai)
   printTxDataMap('LBX', rLbx)
   printTxDataMap('BIT', rBit)
   printTxDataMap('TOT', rTl)
@@ -280,7 +280,7 @@ async function report (argv: Array<any>) {
     const ssResults = config.shapeShiftToken
       ? await doSummaryFunction(doShapeShift)
       : {}
-    const sishResults = config.sideShiftAffiliateId
+    const ssaiResults = config.sideShiftAffiliateId
       ? await doSummaryFunction(doSideshift)
       : {}
     const faResults = config.faastAffiliateId
@@ -338,7 +338,7 @@ async function report (argv: Array<any>) {
     combineResults(results, chResults)
     combineResults(results, faResults)
     combineResults(results, ssResults)
-    combineResults(results, sishResults)
+    combineResults(results, ssaiResults)
     combineResults(results, tlResults)
     combineResults(results, foxResults)
     combineResults(results, csResults)
@@ -371,9 +371,9 @@ async function report (argv: Array<any>) {
     printTxDataMap('SSH', ssResults.monthly)
 
     console.log('\n***** SideShift Daily *****')
-    printTxDataMap('SISH', sishResults.daily)
+    printTxDataMap('SSAI', ssaiResults.daily)
     console.log('\n***** Shapeshift Monthly *****')
-    printTxDataMap('SISH', sishResults.monthly)
+    printTxDataMap('SSAI', ssaiResults.monthly)
 
     console.log('\n***** Coinswitch Daily *****')
     printTxDataMap('CS', csResults.daily)

@@ -9,7 +9,7 @@ const fetch = require('node-fetch')
 const confFileName = './config.json'
 const config = js.readFileSync(confFileName)
 
-const SIDESHIFT_CACHE = './cache/sishRaw.json'
+const SIDESHIFT_CACHE = './cache/SSAIRAW.json'
 const PAGE_LIMIT = 500
 
 type SideShiftTransaction = {
@@ -31,7 +31,7 @@ type SideShiftTransaction = {
 async function doSideshift(swapFuncParams: SwapFuncParams) {
   return checkSwapService(fetchSideshift,
     SIDESHIFT_CACHE,
-    'sish',
+    'SSAI',
     swapFuncParams)
 }
 
@@ -55,7 +55,7 @@ async function fetchSideshift(swapFuncParams: SwapFuncParams) {
       const options = {
         method: 'GET',
         headers: {
-          'affiliateSecret': `${config.sideShiftAffiliateSecret}`
+          'affiliateSecret': `${config.sideShiftAffiliateSecret}` // TODO: figure out how to authenticate with affiliateSecret
         }
       }
 
@@ -63,7 +63,7 @@ async function fetchSideshift(swapFuncParams: SwapFuncParams) {
         .then(response => response.json())
 
       for (const tx of transactions) {
-        const sishTx: StandardTx = {
+        const ssaiTx: StandardTx = {
           status: 'complete',
           inputTXID: tx.quoteId,
           inputAddress: tx.depositAddress.address,
@@ -74,7 +74,7 @@ async function fetchSideshift(swapFuncParams: SwapFuncParams) {
           outputAmount: tx.settleAmount, // TODO: outputAmount is string, but settleAmount is number
           timestamp: tx.createdAt
         }
-        newTransactions.push(sishTx)
+        newTransactions.push(ssaiTx)
       }
 
       if (transactions.length < PAGE_LIMIT) {
