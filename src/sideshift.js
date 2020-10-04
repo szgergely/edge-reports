@@ -12,6 +12,22 @@ const config = js.readFileSync(confFileName)
 const SIDESHIFT_CACHE = './cache/sishRaw.json'
 const PAGE_LIMIT = 500
 
+type SideShiftTransaction = {
+  quoteId: string,
+  depositAddress: {
+    address: string
+  },
+  depositAsset: string,
+  depositMin: number,
+  depositMax: number,
+  settleAddress: {
+    address: string
+  },
+  settleAsset: string,
+  settleAmount: number,
+  createdAt: string
+}
+
 async function doSideshift(swapFuncParams: SwapFuncParams) {
   return checkSwapService(fetchSideshift,
     SIDESHIFT_CACHE,
@@ -43,7 +59,8 @@ async function fetchSideshift(swapFuncParams: SwapFuncParams) {
         }
       }
 
-      const transactions = await fetch(url, options).then(response => response.json())
+      const transactions: SideShiftTransaction[] = await fetch(url, options)
+        .then(response => response.json())
 
       for (const tx of transactions) {
         const sishTx: StandardTx = {
