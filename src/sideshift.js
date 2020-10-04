@@ -63,6 +63,7 @@ async function fetchSideshift(swapFuncParams: SwapFuncParams) {
         .then(response => response.json())
 
       for (const tx of transactions) {
+        const timestamp = new Date(tx.createdAt).getTime() / 1000
         const ssaiTx: StandardTx = {
           status: 'complete',
           inputTXID: tx.quoteId,
@@ -72,7 +73,7 @@ async function fetchSideshift(swapFuncParams: SwapFuncParams) {
           outputAddress: tx.settleAddress.address,
           outputCurrency: tx.settleAsset.toUpperCase(),
           outputAmount: tx.settleAmount, // TODO: outputAmount is string, but settleAmount is number
-          timestamp: tx.createdAt
+          timestamp
         }
         newTransactions.push(ssaiTx)
       }
