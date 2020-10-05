@@ -9,7 +9,7 @@ const fetch = require('node-fetch')
 const confFileName = './config.json'
 const config = js.readFileSync(confFileName)
 
-const SIDESHIFT_CACHE = './cache/SSAIRAW.json'
+const SIDESHIFT_CACHE = './cache/XAIRAW.json'
 const PAGE_LIMIT = 500
 
 type SideShiftTransaction = {
@@ -31,7 +31,7 @@ type SideShiftTransaction = {
 async function doSideshift(swapFuncParams: SwapFuncParams) {
   return checkSwapService(fetchSideshift,
     SIDESHIFT_CACHE,
-    'SSAI',
+    'XAI',
     swapFuncParams)
 }
 
@@ -64,7 +64,7 @@ async function fetchSideshift(swapFuncParams: SwapFuncParams) {
 
       for (const tx of transactions) {
         const timestamp = new Date(tx.createdAt).getTime() / 1000
-        const ssaiTx: StandardTx = {
+        const xaiTx: StandardTx = {
           status: 'complete',
           inputTXID: tx.quoteId,
           inputAddress: tx.depositAddress.address,
@@ -75,7 +75,7 @@ async function fetchSideshift(swapFuncParams: SwapFuncParams) {
           outputAmount: tx.settleAmount, // TODO: outputAmount is string, but settleAmount is number
           timestamp
         }
-        newTransactions.push(ssaiTx)
+        newTransactions.push(xaiTx)
       }
 
       if (transactions.length < PAGE_LIMIT) {
