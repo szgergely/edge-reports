@@ -69,7 +69,7 @@ async function fetchSideShift (swapFuncParams: SwapFuncParams) {
           inputTXID: tx.quoteId,
           inputAddress: tx.depositAddress.address,
           inputCurrency: tx.depositAsset.toUpperCase(),
-          inputAmount: tx.depositMin, // TODO: or depositMax?
+          inputAmount: tx.depositMin,
           outputAddress: tx.settleAddress.address,
           outputCurrency: tx.settleAsset.toUpperCase(),
           outputAmount: String(tx.settleAmount),
