@@ -36,9 +36,9 @@ async function doSideShift (swapFuncParams: SwapFuncParams) {
     swapFuncParams)
 }
 
-function affiliateSignature(affiliateSecret: string, nonce: number): string {
-  return crypto.createHmac('sha256', affiliateSecret)
-    .update(`${affiliateSecret}${nonce}`)
+function affiliateSignature (affiliateSecret: string, affiliateId: string, nonce: number): string {
+  return crypto.createHmac('sha1', affiliateSecret)
+    .update(affiliateId + nonce)
     .digest('hex')
 }
 
@@ -57,10 +57,11 @@ async function fetchSideShift (swapFuncParams: SwapFuncParams) {
   let offset = 0
 
   while (1 && !swapFuncParams.useCache) {
-    const nonce = String(Date.now())
-    const signature = affiliateSignature(config.affiliateSecret, nonce)
+    const nonce = Date.now()
+    const signature = affiliateSignature(config.sideShiftAffiliateSecret, config.sideShiftAffiliateId, nonce)
+
     try {
-      const url = `https://sideshift.ai/api/v1/affiliate/completedOrders?limit=${PAGE_LIMIT}&offset=${offset}&affiliateId=${config.sideShiftAffiliateId}&nonce=${nonce}&signature=${signature}`
+      const url = `https://sideshift.ai/api/affiliate/completedOrders?limit=${PAGE_LIMIT}&offset=${offset}&affiliateId=${config.sideShiftAffiliateId}&nonce=${nonce}&signature=${signature}`
       const transactions: SideShiftTransaction[] = await fetch(url)
         .then(response => response.json())
 
@@ -91,6 +92,7 @@ async function fetchSideShift (swapFuncParams: SwapFuncParams) {
     }
     offset += PAGE_LIMIT
   }
+
   return {
     diskCache,
     newTransactions
