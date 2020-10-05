@@ -28,14 +28,14 @@ type SideShiftTransaction = {
   createdAt: string
 }
 
-async function doSideshift(swapFuncParams: SwapFuncParams) {
+async function doSideshift (swapFuncParams: SwapFuncParams) {
   return checkSwapService(fetchSideshift,
     SIDESHIFT_CACHE,
     'XAI',
     swapFuncParams)
 }
 
-async function fetchSideshift(swapFuncParams: SwapFuncParams) {
+async function fetchSideshift (swapFuncParams: SwapFuncParams) {
   if (!swapFuncParams.useCache) {
     console.log('Fetching Sideshift...')
   }
@@ -72,7 +72,7 @@ async function fetchSideshift(swapFuncParams: SwapFuncParams) {
           inputAmount: tx.depositMin, // TODO: or depositMax?
           outputAddress: tx.settleAddress.address,
           outputCurrency: tx.settleAsset.toUpperCase(),
-          outputAmount: tx.settleAmount, // TODO: outputAmount is string, but settleAmount is number
+          outputAmount: tx.settleAmount.toString(),
           timestamp
         }
         newTransactions.push(xaiTx)
