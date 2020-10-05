@@ -5,6 +5,7 @@ import type {StandardTx, SwapFuncParams} from './checkSwapService'
 const {checkSwapService} = require('./checkSwapService.js')
 const js = require('jsonfile')
 const fetch = require('node-fetch')
+const crypto = require('crypto')
 
 const confFileName = './config.json'
 const config = js.readFileSync(confFileName)
@@ -35,6 +36,12 @@ async function doSideShift (swapFuncParams: SwapFuncParams) {
     swapFuncParams)
 }
 
+function affiliateSignature(affiliateSecret: string, nonce: number): string {
+  return crypto.createHmac('sha256', affiliateSecret)
+    .update(`${affiliateSecret}${nonce}`)
+    .digest('hex')
+}
+
 async function fetchSideShift (swapFuncParams: SwapFuncParams) {
   if (!swapFuncParams.useCache) {
     console.log('Fetching SideShift.ai...')
@@ -50,16 +57,11 @@ async function fetchSideShift (swapFuncParams: SwapFuncParams) {
   let offset = 0
 
   while (1 && !swapFuncParams.useCache) {
+    const nonce = String(Date.now())
+    const signature = affiliateSignature(config.affiliateSecret, nonce)
     try {
-      const url = `https://sideshift.ai/api/v1/affiliate/completedOrders?limit=${PAGE_LIMIT}&offset=${offset}&affiliateId=${config.sideShiftAffiliateId}`
-      const options = {
-        method: 'GET',
-        headers: {
-          'affiliateSecret': `${config.sideShiftAffiliateSecret}` // TODO: figure out how to authenticate with affiliateSecret
-        }
-      }
-
-      const transactions: SideShiftTransaction[] = await fetch(url, options)
+      const url = `https://sideshift.ai/api/v1/affiliate/completedOrders?limit=${PAGE_LIMIT}&offset=${offset}&affiliateId=${config.sideShiftAffiliateId}&nonce=${nonce}&signature=${signature}`
+      const transactions: SideShiftTransaction[] = await fetch(url)
         .then(response => response.json())
 
       for (const tx of transactions) {
