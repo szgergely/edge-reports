@@ -13,7 +13,7 @@ const SIDESHIFT_CACHE = './cache/XAIRAW.json'
 const PAGE_LIMIT = 500
 
 type SideShiftTransaction = {
-  orderId: string,
+  id: string,
   depositAddress: {
     address: string
   },
@@ -66,7 +66,7 @@ async function fetchSideShift (swapFuncParams: SwapFuncParams) {
         const timestamp = new Date(tx.createdAt).getTime() / 1000
         const xaiTx: StandardTx = {
           status: 'complete',
-          inputTXID: tx.orderId,
+          inputTXID: tx.id,
           inputAddress: tx.depositAddress.address,
           inputCurrency: tx.depositAsset.toUpperCase(),
           inputAmount: tx.depositMin,
