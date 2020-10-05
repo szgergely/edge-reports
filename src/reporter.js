@@ -20,7 +20,7 @@ const { doBanxa } = require('./banxa.js')
 const { doBity } = require('./bity.js')
 const { doSwitchain } = require('./switchain.js')
 const { doPaytrie } = require('./paytrie.js')
-const { doSideshift } = require('./sideshift.js')
+const { doSideShift } = require('./sideshift.js')
 const { bns } = require('biggystring')
 const config = require('../config.json')
 const { sprintf } = require('sprintf-js')
@@ -46,8 +46,8 @@ async function main (swapFuncParams: SwapFuncParams) {
     console.error('doShapeShift failed')
     return {}
   })
-  const rXai = await doSideshift(swapFuncParams).catch(e => {
-    console.error('doSideshift failed')
+  const rXai = await doSideShift(swapFuncParams).catch(e => {
+    console.error('doSideShift failed')
     return {}
   })
   const rLbx = await doLibertyX(swapFuncParams).catch(e => {
@@ -281,7 +281,7 @@ async function report (argv: Array<any>) {
       ? await doSummaryFunction(doShapeShift)
       : {}
     const xaiResults = config.sideShiftAffiliateId
-      ? await doSummaryFunction(doSideshift)
+      ? await doSummaryFunction(doSideShift)
       : {}
     const faResults = config.faastAffiliateId
       ? await doSummaryFunction(doFaast)
@@ -370,9 +370,9 @@ async function report (argv: Array<any>) {
     console.log('\n***** Shapeshift Monthly *****')
     printTxDataMap('SSH', ssResults.monthly)
 
-    console.log('\n***** SideShift Daily *****')
+    console.log('\n***** SideShift.ai Daily *****')
     printTxDataMap('XAI', xaiResults.daily)
-    console.log('\n***** Shapeshift Monthly *****')
+    console.log('\n***** SideShift.ai Monthly *****')
     printTxDataMap('XAI', xaiResults.monthly)
 
     console.log('\n***** Coinswitch Daily *****')

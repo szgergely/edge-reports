@@ -28,16 +28,16 @@ type SideShiftTransaction = {
   createdAt: string
 }
 
-async function doSideshift (swapFuncParams: SwapFuncParams) {
-  return checkSwapService(fetchSideshift,
+async function doSideShift (swapFuncParams: SwapFuncParams) {
+  return checkSwapService(fetchSideShift,
     SIDESHIFT_CACHE,
     'XAI',
     swapFuncParams)
 }
 
-async function fetchSideshift (swapFuncParams: SwapFuncParams) {
+async function fetchSideShift (swapFuncParams: SwapFuncParams) {
   if (!swapFuncParams.useCache) {
-    console.log('Fetching Sideshift...')
+    console.log('Fetching SideShift.ai...')
   }
   let diskCache = {txs: []}
   try {
@@ -95,4 +95,4 @@ async function fetchSideshift (swapFuncParams: SwapFuncParams) {
   }
 }
 
-module.exports = {doSideshift}
+module.exports = {doSideShift}
