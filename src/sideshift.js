@@ -10,7 +10,7 @@ const crypto = require('crypto')
 const confFileName = './config.json'
 const config = js.readFileSync(confFileName)
 
-const SIDESHIFT_CACHE = './cache/XAIRAW.json'
+const SIDESHIFT_CACHE = './cache/xaiRaw.json'
 const PAGE_LIMIT = 500
 
 type SideShiftTransaction = {
