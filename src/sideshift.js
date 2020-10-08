@@ -12,6 +12,7 @@ const config = js.readFileSync(confFileName)
 
 const SIDESHIFT_CACHE = './cache/xaiRaw.json'
 const PAGE_LIMIT = 500
+const TRANSACTIONS_TO_FETCH = 1500
 
 type SideShiftTransaction = {
   id: string,
@@ -88,7 +89,7 @@ async function fetchSideShift (swapFuncParams: SwapFuncParams) {
       console.log(e)
       break
     }
-    if (offset > 1500) {
+    if (offset > TRANSACTIONS_TO_FETCH) {
       break
     }
     offset += PAGE_LIMIT
